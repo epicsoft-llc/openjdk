@@ -116,10 +116,10 @@ exampleProjectBuild:
   services:
     - docker:dind
   variables:
-    DOCKER_IMAGE: $CI_REGISTRY:$VERSION
+    DOCKER_IMAGE: $CI_REGISTRY_IMAGE:$VERSION
     JAVA_JAR_PATH: build/libs
   before_script:
-    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - echo "$CI_JOB_TOKEN" | docker login -u gitlab-ci-token --password-stdin $CI_REGISTRY
   after_script:
     - docker logout $CI_REGISTRY
   script:
@@ -141,21 +141,30 @@ LABEL org.label-schema.name="exampleProject" \
       org.label-schema.schema-version="1.0" \
       org.label-schema.build-date="$BUILD_DATE"
 
-ENV JAVA_SERVER="-server" \
-    JAVA_DOCKER="-XX:+UseContainerSupport -XX:MaxRAMPercentage=80" \
-    JAVA_SECURITY="-Djava.security.egd=file:/dev/./urandom" \
-    JAVA_ENCODING="-Dfile.encoding=UTF-8" \
-    JAVA_TIMEZONE="-Duser.timezone=GMT" \
+ENV JAVA_DOCKER="-XX:MaxRAMPercentage=75" \
+    JAVA_TIMEZONE="-Duser.timezone=UTC" \
     JAVA_ERROR="-XX:+ExitOnOutOfMemoryError" \
     JAVA_OPTS=""
 
 ARG JAR_FILE
 COPY $JAR_FILE /app.jar
 
+USER 10001:10001
+
 EXPOSE 8080
 
-ENTRYPOINT [ "sh", "-c", "java $JAVA_SERVER $JAVA_DOCKER $JAVA_SECURITY $JAVA_ENCODING $JAVA_TIMEZONE $JAVA_ERROR $JAVA_OPTS -jar /app.jar" ]
+ENTRYPOINT [ "sh", "-c", "exec java $JAVA_DOCKER $JAVA_TIMEZONE $JAVA_ERROR $JAVA_OPTS -jar /app.jar" ]
 ```
+
+- `exec` makes the JVM process 1, so the `SIGTERM` of `docker stop` reaches it and the application shuts down
+  gracefully. Without it, the `sh` of the Debian images (dash) stays process 1 and the JVM is killed after the stop
+  timeout.
+- The heap gets 75 % of the container memory limit; metaspace, thread stacks, code cache and direct buffers need the
+  rest. Below a limit of about 1.75 GB, or with one CPU, the JVM picks the Serial GC by itself. A G1 application that
+  is idle most of the time hands unused heap back with `-XX:G1PeriodicGCInterval=60000` (Java 12 and later).
+- `USER 10001:10001` runs the application without root; the JVM needs no passwd entry for a numeric user.
+- Current JDKs no longer need `-server`, `-XX:+UseContainerSupport` or `-Djava.security.egd=file:/dev/./urandom`.
+  `-Dfile.encoding=UTF-8` is the default since Java 18; add it to `JAVA_OPTS` on the Java 11 and 17 images.
 
 ## End of life
 

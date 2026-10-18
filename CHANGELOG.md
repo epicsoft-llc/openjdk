@@ -4,6 +4,26 @@ All notable changes to this project are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The project has no version of its own —
 the images are tagged with the Java version they contain — so every entry is headed by the date it reached `main`.
 
+## 2026-10-18
+
+### Security
+- The packages of the base image are upgraded in every current image (`apk --no-cache upgrade`, `apt-get upgrade`).
+  The exactly pinned base images had kept them at their release state, so the images still held OpenSSL `3.5.8`
+  although Alpine `3.24` already offered `3.5.9`, a security release whose most severe fix is rated High - plus the
+  pending fixes for zlib, the X11 libraries, curl, expat and xz; the Debian images missed 13 updates, among them libc6
+- Base images raised: `alpine:3.24.2` (was `3.24.1`), `docker:29.9.1-dind` (was `29.7.2-dind`, now on Alpine
+  `3.24.2` as well) and `debian:13.7-slim` (was `13.6-slim`). The Java versions stay
+- The pipeline takes its tokens over stdin and through the environment instead of the command line
+
+### Changed
+- README Dockerfile example: `exec java`, so the JVM receives `SIGTERM` as process 1; heap at 75 % of the container
+  limit; non-root `USER`; `UTC`. Options current JDKs no longer need are gone, each with a note
+- README GitLab CI example: pushes to `$CI_REGISTRY_IMAGE` and logs in with `--password-stdin`
+- The short description is the same text on Docker Hub, GitLab and GitHub
+
+### Removed
+- `rm -rf /var/cache/apk/*` from the current Alpine Dockerfiles — `apk --no-cache` leaves no cache behind
+
 ## 2026-10-13
 
 ### Added

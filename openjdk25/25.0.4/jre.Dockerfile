@@ -1,6 +1,6 @@
-FROM alpine:3.24.1
+FROM alpine:3.24.2
 
-ENV ALPINE_VERSION="3.24.1"
+ENV ALPINE_VERSION="3.24.2"
 ENV JAVA_VERSION="25.0.4"
 
 ARG BUILD_DATE="development"
@@ -22,9 +22,10 @@ LABEL image.name="epicsoft_openjdk_jre" \
       alpine_version="$ALPINE_VERSION" \
       java_version="$JAVA_VERSION"
 
-RUN apk --no-cache add openjdk25-jre=25.0.4_p7-r0 \
+#### packages of the base image lag behind its repository - the upgrade brings their security fixes
+RUN apk --no-cache upgrade \
+ && apk --no-cache add openjdk25-jre=25.0.4_p7-r0 \
                        ca-certificates \
                        ttf-dejavu \
                        ttf-liberation \
- && update-ca-certificates \
- && rm -rf /var/cache/apk/*
+ && update-ca-certificates

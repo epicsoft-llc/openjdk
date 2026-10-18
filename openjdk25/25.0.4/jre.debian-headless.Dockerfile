@@ -1,6 +1,6 @@
-FROM debian:13.6-slim
+FROM debian:13.7-slim
 
-ENV DEBIAN_VERSION="13.6"
+ENV DEBIAN_VERSION="13.7"
 ENV JAVA_VERSION="25.0.4"
 
 ARG BUILD_DATE="development"
@@ -22,7 +22,9 @@ LABEL image.name="epicsoft_openjdk_jre" \
       debian_version="$DEBIAN_VERSION" \
       java_version="$JAVA_VERSION"
 
+#### packages of the base image lag behind its repository - the upgrade brings their security fixes
 RUN apt-get update \
+ && apt-get upgrade -y \
  && apt-get install --no-install-recommends -y openjdk-25-jre-headless=25.0.4.1+1-1~deb13u1 \
                                                ca-certificates \
                                                fontconfig \

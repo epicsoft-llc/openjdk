@@ -19,15 +19,15 @@ built by GitLab CI.
   names of internal repositories or consuming projects, no infrastructure details. Before finishing a change, search
   every published file (`git ls-files` plus new files) for such terms.
 - **Everything in English** — Dockerfiles, comments, README, CHANGELOG, commit messages.
-- **Do not name the AI tool** in files, commit messages or trailers, or merge request texts. The only exception is
-  `.gitignore`, which keeps tool-specific local files out of the repository.
+- **No attribution lines** — no `Co-Authored-By:` trailer, no "Generated with" line and no session link in files,
+  commit messages or merge request texts.
 - **Never commit, push, merge, rebase or tag** — changes stay in the working tree. Proposed commit messages follow
   Conventional Commits (`feat:`, `fix:`, `ci:`, `docs:`, `refactor:`, `revert:`).
 - **`README.md` is part of the release.** `uploadReadme` syncs it to the Docker Hub description, so every link in it
   stays absolute — a relative link breaks on Docker Hub. The trailing two spaces on lines under `## Versions` are hard
   line breaks; `.editorconfig` disables trailing-whitespace trimming for `*.md`.
-- **Every change gets a `CHANGELOG.md` line** under `## [Unreleased]`. When it reaches `main`, that section is renamed
-  to the date, `## YYYY-MM-DD` — the project has no version of its own.
+- **Every change gets a `CHANGELOG.md` line** under a date heading, `## YYYY-MM-DD` — never `## [Unreleased]`; the
+  project has no version of its own.
 - **Keep this file current** — update it after every CI change, new image variant or new rule.
 
 ## Layout
@@ -58,7 +58,9 @@ Every Dockerfile pins three things, and they must stay consistent:
   `aarch64` (the `arch=` selector on that page). An arch-only rebuild would break the build for that arch alone.
 - **`ENV JAVA_VERSION`** — the plain `x.y.z`, also used as the image tag (`jdk25.0.4`, `jre25.0.4`).
 
-Everything else in the `apk add` / `apt-get install` line is unpinned.
+Everything else in the `apk add` / `apt-get install` line is unpinned. Every image runs `apk --no-cache upgrade` /
+`apt-get upgrade -y` first: the base image is pinned to an exact release and keeps the package state of that release,
+so without the upgrade a weekly rebuild would not bring a single security fix.
 
 The Debian pair pins the same way against a different archive:
 
