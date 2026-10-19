@@ -97,7 +97,7 @@ them:
    `DEBIAN_VERSION`, `JAVA_VERSION` and the pinned `openjdk-25-{jdk,jre}-headless=` revision.
 3. In the directory's `.gitlab-ci.yml` bump `OPENJDK<major>_IMAGE_TAG` — the only version literal there,
    `OPENJDK<major>_PATH` derives from it.
-4. In the root `.gitlab-ci.yml` point the `include:` entry at the new directory.
+4. In the root `.gitlab-ci.yml` point the `include:` entry at the new directory; it keeps its `rules: *notOnTags`.
 5. In `README.md` update the tag list under `## Versions` and the path in the local check example.
 6. Add the release to `CHANGELOG.md`.
 
@@ -142,7 +142,13 @@ manifest list inside the registry without pulling layers. It must **not** go bac
 floating tag.
 
 All release-stage jobs (`release<major>`, `releaseLatest`, `uploadReadme`) extend `.releaseOnMain` and run only on the
-default branch. Build jobs run on every branch but push exact-version tags only, nothing floating.
+default branch. Build jobs run on every branch but push exact-version tags only, nothing floating; a git tag skips
+them, because the `include:` entries carry `rules: *notOnTags`.
+
+**Git tags and GitHub releases:** a git tag is the date of a `CHANGELOG.md` entry, such as `2026-10-18`, set on the
+green commit of the default branch that carries the entry. Until then the entry may still grow; once tagged it is
+fixed, and a correction goes into the next entry. A tag pipeline runs only `github-release`, which waits for the tag on
+GitHub and creates the release from that entry. Tags are protected, because `GITHUB_TOKEN` is a protected variable.
 
 ## Checking a change locally
 

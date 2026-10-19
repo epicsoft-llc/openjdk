@@ -3,6 +3,12 @@
 All notable changes to this project are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The project has no version of its own —
 the images are tagged with the Java version they contain — so every entry is headed by the date it reached `main`.
+That date is also its git tag, with a release on GitHub.
+
+## 2026-10-19
+
+### Added
+- A git tag and a GitHub release for every entry of this changelog, named after its date
 
 ## 2026-10-18
 
