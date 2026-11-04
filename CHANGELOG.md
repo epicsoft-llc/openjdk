@@ -5,6 +5,15 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The
 the images are tagged with the Java version they contain — so every entry is headed by the date it reached `main`.
 That date is also its git tag, with a release on GitHub.
 
+## 2026-11-03
+
+### Security
+- Java `17.0.21`, `21.0.13` and `25.0.5`, the OpenJDK security releases of October 2026 (were `17.0.20`, `21.0.12` and
+  `25.0.4`). Alpine `3.24` replaced the pinned packages on 2026-10-31, so the weekly build of 2026-11-01 failed for these
+  three versions and their images stayed on the previous release. The Debian pair moves to `25.0.5+8`
+- Base images raised for all four Java versions: `alpine:3.24.3` (was `3.24.2`) and `docker:29.9.2-dind` (was
+  `29.9.1-dind`, now on Alpine `3.24.3` as well). Java 11 stays at `11.0.32`, the newest release Alpine packages
+
 ## 2026-10-19
 
 ### Added

@@ -33,11 +33,11 @@ after_script:
 include:
   - local: openjdk11/11.0.32/.gitlab-ci.yml
     rules: *notOnTags
-  - local: openjdk17/17.0.20/.gitlab-ci.yml
+  - local: openjdk17/17.0.21/.gitlab-ci.yml
     rules: *notOnTags
-  - local: openjdk21/21.0.12/.gitlab-ci.yml
+  - local: openjdk21/21.0.13/.gitlab-ci.yml
     rules: *notOnTags
-  - local: openjdk25/25.0.4/.gitlab-ci.yml
+  - local: openjdk25/25.0.5/.gitlab-ci.yml
     rules: *notOnTags
 
 #### Release only on the default branch

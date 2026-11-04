@@ -1,0 +1,39 @@
+FROM debian:13.7-slim
+
+ENV DEBIAN_VERSION="13.7"
+ENV JAVA_VERSION="25.0.5"
+
+ARG BUILD_DATE="development"
+LABEL org.label-schema.name="OpenJDK-JDK" \
+      org.label-schema.description="OpenJDK-JDK based on Debian Linux" \
+      org.label-schema.vendor="epicsoft LLC / Alexander Schwarz <info@epicsoft.one>" \
+      org.label-schema.version="$JAVA_VERSION" \
+      org.label-schema.schema-version="1.0" \
+      org.label-schema.build-date="$BUILD_DATE" \
+      org.label-schema.url="https://gitlab.com/epicsoft-networks/openjdk" \
+      org.label-schema.vcs-url="https://gitlab.com/epicsoft-networks/openjdk/tree/main"
+
+LABEL image.name="epicsoft_openjdk_jdk" \
+      image.description="OpenJDK-JDK based on Debian Linux" \
+      maintainer="epicsoft LLC" \
+      maintainer.name="Alexander Schwarz <info@epicsoft.one>" \
+      maintainer.copyright="Copyright 2023-2026 epicsoft LLC / Alexander Schwarz" \
+      license="MIT" \
+      debian_version="$DEBIAN_VERSION" \
+      java_version="$JAVA_VERSION"
+
+#### packages of the base image lag behind its repository - the upgrade brings their security fixes
+RUN apt-get update \
+ && apt-get upgrade -y \
+ && apt-get install --no-install-recommends -y openjdk-25-jdk-headless=25.0.5+8-1~deb13u1 \
+                                               ca-certificates \
+                                               fontconfig \
+                                               fonts-dejavu \
+                                               fonts-liberation \
+                                               fonts-liberation-sans-narrow \
+                                               jq \
+                                               libasound2t64 \
+                                               libfreetype6 \
+                                               libharfbuzz0b \
+ && update-ca-certificates \
+ && rm -rf /var/lib/apt/lists/*

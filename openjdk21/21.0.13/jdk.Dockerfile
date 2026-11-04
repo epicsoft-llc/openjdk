@@ -1,0 +1,34 @@
+FROM docker:29.9.2-dind
+
+ENV DOCKER_VERSION="29.9.2"
+ENV ALPINE_VERSION="3.24.3"
+ENV JAVA_VERSION="21.0.13"
+
+ARG BUILD_DATE="development"
+LABEL org.label-schema.name="OpenJDK-JDK" \
+      org.label-schema.description="OpenJDK-JDK based on Docker in Docker (DinD) and Alpine Linux" \
+      org.label-schema.vendor="epicsoft LLC / Alexander Schwarz <info@epicsoft.one>" \
+      org.label-schema.version="$JAVA_VERSION" \
+      org.label-schema.schema-version="1.0" \
+      org.label-schema.build-date="$BUILD_DATE" \
+      org.label-schema.url="https://gitlab.com/epicsoft-networks/openjdk" \
+      org.label-schema.vcs-url="https://gitlab.com/epicsoft-networks/openjdk/tree/main"
+
+LABEL image.name="epicsoft_openjdk_jdk" \
+      image.description="OpenJDK-JDK based on Docker in Docker (DinD) and Alpine Linux" \
+      maintainer="epicsoft LLC" \
+      maintainer.name="Alexander Schwarz <info@epicsoft.one>" \
+      maintainer.copyright="Copyright 2023-2026 epicsoft LLC / Alexander Schwarz" \
+      license="MIT" \
+      docker_version="$DOCKER_VERSION" \
+      alpine_version="$ALPINE_VERSION" \
+      java_version="$JAVA_VERSION"
+
+#### packages of the base image lag behind its repository - the upgrade brings their security fixes
+RUN apk --no-cache upgrade \
+ && apk --no-cache add openjdk21-jdk=21.0.13.0.3_p1-r0 \
+                       ca-certificates \
+                       jq \
+                       ttf-dejavu \
+                       ttf-liberation \
+ && update-ca-certificates

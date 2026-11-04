@@ -38,28 +38,28 @@ Docker automatically pulls the matching architecture.
 
 ## Versions
 
-`jdk` `jdk25` `jdk25.0.4` `jdk25-latest` `jdk-latest`  
+`jdk` `jdk25` `jdk25.0.5` `jdk25-latest` `jdk-latest`  
 based on Docker DinD indirectly on Alpine with Java JDK 25 - build `weekly`
 
-`jre` `jre25` `jre25.0.4` `jre25-latest` `jre-latest` `latest`  
+`jre` `jre25` `jre25.0.5` `jre25-latest` `jre-latest` `latest`  
 based on Alpine image with Java JRE 25 - build `weekly`
 
-`jdk-debian-headless` `jdk25-debian-headless` `jdk25.0.4-debian-headless` `jdk25-debian-headless-latest` `jdk-debian-headless-latest`  
+`jdk-debian-headless` `jdk25-debian-headless` `jdk25.0.5-debian-headless` `jdk25-debian-headless-latest` `jdk-debian-headless-latest`  
 based on Debian slim image with Java JDK 25 headless - build `weekly`
 
-`jre-debian-headless` `jre25-debian-headless` `jre25.0.4-debian-headless` `jre25-debian-headless-latest` `jre-debian-headless-latest`  
+`jre-debian-headless` `jre25-debian-headless` `jre25.0.5-debian-headless` `jre25-debian-headless-latest` `jre-debian-headless-latest`  
 based on Debian slim image with Java JRE 25 headless - build `weekly`
 
-`jdk21` `jdk21.0.12` `jdk21-latest`  
+`jdk21` `jdk21.0.13` `jdk21-latest`  
 based on Docker DinD indirectly on Alpine with Java JDK 21 - build `weekly`
 
-`jre21` `jre21.0.12` `jre21-latest`  
+`jre21` `jre21.0.13` `jre21-latest`  
 based on Alpine image with Java JRE 21 - build `weekly`
 
-`jdk17` `jdk17.0.20` `jdk17-latest`  
+`jdk17` `jdk17.0.21` `jdk17-latest`  
 based on Docker DinD indirectly on Alpine with Java JDK 17 - build `weekly`
 
-`jre17` `jre17.0.20` `jre17-latest`  
+`jre17` `jre17.0.21` `jre17-latest`  
 based on Alpine image with Java JRE 17 - build `weekly`
 
 `jdk11` `jdk11.0.32` `jdk11-latest`  
@@ -182,7 +182,7 @@ The repository holds Dockerfiles only, everything is built by GitLab CI. Every J
 `openjdk<major>/<version>/` with the Dockerfiles and a `.gitlab-ci.yml` for its build jobs. Older directories are kept as
 history; the root `.gitlab-ci.yml` includes exactly one directory per major version.
 
-- The build jobs push the exact-version tags (`jdk25.0.4`, `jre25.0.4`, …) as multi-platform images with
+- The build jobs push the exact-version tags (`jdk25.0.5`, `jre25.0.5`, …) as multi-platform images with
   `docker buildx` — the `arm64` half is built under QEMU emulation — and check `java --version` on every platform.
 - The release jobs run on `main` only and copy those tags to the floating ones (`jdk25`, `jre-latest`, `latest`, …)
   inside the registry, so the manifest list keeps all platforms.
@@ -205,7 +205,7 @@ history; the root `.gitlab-ci.yml` includes exactly one directory per major vers
 A single-platform build from the repository root catches a wrong package pin right away:
 
 ```sh
-docker build --pull --no-cache -t openjdk-check -f openjdk25/25.0.4/jre.Dockerfile . \
+docker build --pull --no-cache -t openjdk-check -f openjdk25/25.0.5/jre.Dockerfile . \
   --build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 docker run --rm openjdk-check java --version
 ```
