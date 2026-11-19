@@ -1,0 +1,41 @@
+variables:
+  OPENJDK11_IMAGE_TAG: 11.0.33
+  OPENJDK11_PATH: openjdk11/$OPENJDK11_IMAGE_TAG
+
+jre11:
+  stage: build
+  script:
+    #### Show the platforms the builder can serve (arm64 needs QEMU binfmt on the runner host)
+    - docker buildx inspect --bootstrap
+    #### Build and push multi-platform Docker image
+    - docker buildx build . --push --pull --no-cache
+        --platform $BUILD_PLATFORMS
+        -f $OPENJDK11_PATH/jre.Dockerfile
+        -t $CI_REGISTRY_IMAGE:jre$OPENJDK11_IMAGE_TAG
+        -t $DOCKER_REGISTRY:jre$OPENJDK11_IMAGE_TAG
+        --build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+    #### Versions, once per platform
+    - for platform in $(echo $BUILD_PLATFORMS | tr ',' ' '); do
+        docker run --rm --platform $platform $CI_REGISTRY_IMAGE:jre$OPENJDK11_IMAGE_TAG cat /etc/alpine-release;
+        docker run --rm --platform $platform $CI_REGISTRY_IMAGE:jre$OPENJDK11_IMAGE_TAG java --version;
+      done
+
+jdk11:
+  stage: build
+  script:
+    #### Show the platforms the builder can serve (arm64 needs QEMU binfmt on the runner host)
+    - docker buildx inspect --bootstrap
+    #### Build and push multi-platform Docker image
+    - docker buildx build . --push --pull --no-cache
+        --platform $BUILD_PLATFORMS
+        -f $OPENJDK11_PATH/jdk.Dockerfile
+        -t $CI_REGISTRY_IMAGE:jdk$OPENJDK11_IMAGE_TAG
+        -t $DOCKER_REGISTRY:jdk$OPENJDK11_IMAGE_TAG
+        --build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+    #### Versions, once per platform
+    - for platform in $(echo $BUILD_PLATFORMS | tr ',' ' '); do
+        docker run --rm --platform $platform $CI_REGISTRY_IMAGE:jdk$OPENJDK11_IMAGE_TAG docker --version;
+        docker run --rm --platform $platform $CI_REGISTRY_IMAGE:jdk$OPENJDK11_IMAGE_TAG cat /etc/alpine-release;
+        docker run --rm --platform $platform $CI_REGISTRY_IMAGE:jdk$OPENJDK11_IMAGE_TAG java --version;
+        docker run --rm --platform $platform $CI_REGISTRY_IMAGE:jdk$OPENJDK11_IMAGE_TAG jq --version;
+      done

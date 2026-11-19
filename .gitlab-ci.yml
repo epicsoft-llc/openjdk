@@ -31,7 +31,7 @@ after_script:
   - if: $CI_COMMIT_TAG == null
 
 include:
-  - local: openjdk11/11.0.32/.gitlab-ci.yml
+  - local: openjdk11/11.0.33/.gitlab-ci.yml
     rules: *notOnTags
   - local: openjdk17/17.0.21/.gitlab-ci.yml
     rules: *notOnTags

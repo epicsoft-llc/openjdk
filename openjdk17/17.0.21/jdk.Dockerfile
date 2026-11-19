@@ -1,7 +1,7 @@
-FROM docker:29.9.2-dind
+FROM docker:29.10.0-dind
 
-ENV DOCKER_VERSION="29.9.2"
-ENV ALPINE_VERSION="3.24.3"
+ENV DOCKER_VERSION="29.10.0"
+ENV ALPINE_VERSION="3.24.4"
 ENV JAVA_VERSION="17.0.21"
 
 ARG BUILD_DATE="development"
@@ -26,7 +26,7 @@ LABEL image.name="epicsoft_openjdk_jdk" \
 
 #### packages of the base image lag behind its repository - the upgrade brings their security fixes
 RUN apk --no-cache upgrade \
- && apk --no-cache add openjdk17-jdk=17.0.21.0.3_p1-r0 \
+ && apk --no-cache add openjdk17-jdk=17.0.21.1_p2-r0 \
                        ca-certificates \
                        jq \
                        ttf-dejavu \

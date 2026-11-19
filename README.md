@@ -62,10 +62,10 @@ based on Docker DinD indirectly on Alpine with Java JDK 17 - build `weekly`
 `jre17` `jre17.0.21` `jre17-latest`  
 based on Alpine image with Java JRE 17 - build `weekly`
 
-`jdk11` `jdk11.0.32` `jdk11-latest`  
+`jdk11` `jdk11.0.33` `jdk11-latest`  
 based on Docker DinD indirectly on Alpine with Java JDK 11 - build `weekly`
 
-`jre11` `jre11.0.32` `jre11-latest`  
+`jre11` `jre11.0.33` `jre11-latest`  
 based on Alpine image with Java JRE 11 - build `weekly`
 
 For older versions see subdirectories
