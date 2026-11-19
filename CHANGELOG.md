@@ -15,8 +15,9 @@ That date is also its git tag, with a release on GitHub.
   2026-11-15 (was `11.0.32`): new tags `jdk11.0.33` and `jre11.0.33`
 - Base images raised for all four Java versions: `alpine:3.24.4` (was `3.24.3`) and `docker:29.10.0-dind` (was
   `29.9.2-dind`, now on Alpine `3.24.4` as well). The package upgrade of the build brings OpenSSL `3.5.9-r1` with the
-  security patches Alpine added on 2026-11-18. The Debian pair stays on `25.0.5+8` and `debian:13.7-slim`, the newest
-  Debian offers
+  security patches Alpine added on 2026-11-18
+- The Debian pair moves to `25.0.5.1+2` from `trixie-security` (was `25.0.5+8`, which Debian no longer offers); the tags
+  stay `25.0.5`, the base stays `debian:13.7-slim`, the newest Debian offers
 
 ## 2026-11-03
 

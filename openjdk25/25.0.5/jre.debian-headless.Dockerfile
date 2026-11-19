@@ -25,7 +25,7 @@ LABEL image.name="epicsoft_openjdk_jre" \
 #### packages of the base image lag behind its repository - the upgrade brings their security fixes
 RUN apt-get update \
  && apt-get upgrade -y \
- && apt-get install --no-install-recommends -y openjdk-25-jre-headless=25.0.5+8-1~deb13u1 \
+ && apt-get install --no-install-recommends -y openjdk-25-jre-headless=25.0.5.1+2-1~deb13u1 \
                                                ca-certificates \
                                                fontconfig \
                                                fonts-dejavu \
